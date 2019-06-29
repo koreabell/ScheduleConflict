@@ -1,0 +1,8 @@
+﻿  DataProcessor.cpp
+g:\projects\scheduleconflict\scheduleconflict\datatypes.h(47): warning C4091: 'typedef ': ignored on left of 'SCHEDLIST' when no variable is declared
+  main.cpp
+g:\projects\scheduleconflict\scheduleconflict\datatypes.h(47): warning C4091: 'typedef ': ignored on left of 'SCHEDLIST' when no variable is declared
+  TimeCalc.cpp
+g:\projects\scheduleconflict\scheduleconflict\datatypes.h(47): warning C4091: 'typedef ': ignored on left of 'SCHEDLIST' when no variable is declared
+  Generating Code...
+LINK : fatal error LNK1561: entry point must be defined
