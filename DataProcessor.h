@@ -5,10 +5,10 @@
 #include "main.h"
 #include <string.h>
 
-ACTIVITY*GetFirstActivityInRange(SCHEDLIST*activity, RULE rule);
+SCHEDLIST*GetFirstActivityInRange(SCHEDLIST*activity, RULE rule);
 
-CONFLICT_STATUS ValidateConflict(ACTIVITY activity, RULE rule);
-CONFLICT_STATUS ValidateConflict(ACTIVITY activity, RULE rule, int*Threshold);
+CONFLICT_STATUS ValidateConflict(SCHEDLIST*schedules, RULE rule);
+CONFLICT_STATUS ValidateConflict(SCHEDLIST*schedules, RULE rule, int*ReturnedThreshold);
 
 
 #endif

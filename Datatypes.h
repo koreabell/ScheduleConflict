@@ -47,13 +47,13 @@ typedef struct SCHEDLIST{
 };
 
 typedef enum {
-	RULE_EQUAL,					//Value being compared should be equal to specified value
-	RULE_WITHIN,				//Value being compared should be within specified range
-	RULE_GREATER,				//Value being compared should be greater than specified value
-	RULE_EQGREATER,				//Value being compared should be equal to or greater than specified value
-	RULE_LESS,					//Value being compared should be less than specified value
-	RULE_EQLESS,				//Value being compared should be equal to or less than specified value
-	RULE_RESERVED				//RESERVED FOR FUTURE USE
+	CRITERIA_EQUAL,					//Value being compared should be equal to specified value
+	CRITERIA_WITHIN,				//Value being compared should be within specified range
+	CRITERIA_GREATER,				//Value being compared should be greater than specified value
+	CRITERIA_EQGREATER,				//Value being compared should be equal to or greater than specified value
+	CRITERIA_LESS,					//Value being compared should be less than specified value
+	CRITERIA_EQLESS,				//Value being compared should be equal to or less than specified value
+	CRITERIA_RESERVED				//RESERVED FOR FUTURE USE
 } RULE_CRITERIA;
 
 typedef enum {
@@ -97,7 +97,13 @@ typedef struct {
 	unsigned int uiMinThreshold;
 	unsigned int uiMaxThreshold;
 	unsigned int uiRange;
+	unsigned int uiClockTimeInSeconds;
+	unsigned int uiReservedData1;
+	unsigned int uiReservedData2;
+	unsigned int uiReservedData3;
+	unsigned int uiReservedData4;
 	TIME_UNIT RangeUnit;
+	TIME_UNIT RuleUnit;
 	BOOL bFromStart;
 	BOOL bFutureRange;
 	BOOL bThresholdEnabled;
