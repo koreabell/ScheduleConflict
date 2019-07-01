@@ -15,6 +15,7 @@ SCHEDLIST * GetFirstActivityInRange(SCHEDLIST * activity, RULE rule)
 	}
 
 	if (activity->pPrev == NULL) return NULL;
+	else pCompare = activity->pPrev;
 
 	switch (rule.RangeUnit) {
 		case TIMEUNIT_MINUTE:
@@ -57,6 +58,7 @@ CONFLICT_STATUS ValidateConflict(SCHEDLIST*schedules, RULE rule)
 	CONFLICT_STATUS ret; 
 	int i = 0, iX = 0, iY = 0; 
 	tm*tmCalc; 
+	time_t timeVar;
  
 	switch (rule.CompareType) { 
 		case COMPARE_DURATION: 
@@ -194,66 +196,109 @@ CONFLICT_STATUS ValidateConflict(SCHEDLIST*schedules, RULE rule)
 			}
 			break;
 		case COMPARE_SINCE_CLOCKTIME:
+			tmCalc = localtime(&schedules->data.tStart);
+			tmCalc->tm_hour = (int)rule.uiClockTimeInSeconds / 3600;
+			tmCalc->tm_min = (int)rule.uiClockTimeInSeconds % 3600;
+			timeVar = mktime(tmCalc);
+
+			iX = GetTimeBetween(timeVar, schedules->data, rule.RuleUnit);
+
 			switch (rule.Criteria) {
-			case CRITERIA_EQUAL:
-				break;
+				case CRITERIA_EQUAL:
+					if (iX == rule.uiMax) return CONFLICT_NONE;
+					else if (iX < rule.uiMax) return CONFLICT_BELOW_MIN;
+					else return CONFLICT_ABOVE_MAX;
+					break;
 
-			case CRITERIA_WITHIN:
-				break;
+				case CRITERIA_WITHIN:
+					if (iX >= rule.uiMin && iX <= rule.uiMax) {
+						if (rule.bWarningEnabled == FALSE) return CONFLICT_NONE;
+						else if (iX <= rule.uiMin + rule.uiMinThreshold) return CONFLICT_WARNING_MIN;
+						else if (iX >= rule.uiMax - rule.uiMaxThreshold) return CONFLICT_WARNING_MAX;
+						else return CONFLICT_NONE;
 
-			case CRITERIA_GREATER:
-				break;
+					}
+					else if (iX < rule.uiMin) return CONFLICT_BELOW_MIN;
+					else return CONFLICT_ABOVE_MAX;
+					break;
 
-			case CRITERIA_EQGREATER:
-				break;
+				case CRITERIA_GREATER:
+					if (iX > rule.uiMin) {
+						if (rule.bWarningEnabled == FALSE) return CONFLICT_NONE;
+						else if (iX <= rule.uiMin + rule.uiMinThreshold) return CONFLICT_WARNING_MIN;
+						else return CONFLICT_NONE;
+					}
+					else return CONFLICT_BELOW_MIN;
+					break;
 
-			case CRITERIA_LESS:
-				break;
+				case CRITERIA_EQGREATER:
+					if (iX >= rule.uiMin) {
+						if (rule.bWarningEnabled == FALSE) return CONFLICT_NONE;
+						else if (iX <= rule.uiMin + rule.uiMinThreshold) return CONFLICT_WARNING_MIN;
+						else return CONFLICT_NONE;
+					}
+					else return CONFLICT_BELOW_MIN;
+					break;
 
-			case CRITERIA_EQLESS:
-				break;
+				case CRITERIA_LESS:
+					if (iX < rule.uiMax) {
+						if (rule.bWarningEnabled == FALSE) return CONFLICT_NONE;
+						else if (iX >= rule.uiMax + rule.uiMaxThreshold) return CONFLICT_WARNING_MAX;
+						else return CONFLICT_NONE;
+					}
+					else return CONFLICT_ABOVE_MAX;
+					break;
+
+				case CRITERIA_EQLESS:
+					if (iX <= rule.uiMax) {
+						if (rule.bWarningEnabled == FALSE) return CONFLICT_NONE;
+						else if (iX >= rule.uiMax + rule.uiMaxThreshold) return CONFLICT_WARNING_MAX;
+						else return CONFLICT_NONE;
+					}
+					else return CONFLICT_ABOVE_MAX;
+					break;
 			}
 			break;
 		case COMPARE_SINCE_ACTIVITY:
 			switch (rule.Criteria) {
-			case CRITERIA_EQUAL:
-				break;
+				case CRITERIA_EQUAL:
+					break;
 
-			case CRITERIA_WITHIN:
-				break;
+				case CRITERIA_WITHIN:
+					break;
 
-			case CRITERIA_GREATER:
-				break;
+				case CRITERIA_GREATER:
+					break;
 
-			case CRITERIA_EQGREATER:
-				break;
+				case CRITERIA_EQGREATER:
+					break;
 
-			case CRITERIA_LESS:
-				break;
+				case CRITERIA_LESS:
+					break;
 
-			case CRITERIA_EQLESS:
-				break;
+				case CRITERIA_EQLESS:
+					break;
 			}
 			break;
 		case COMPARE_BEFORE_CLOCKTIME:
 			switch (rule.Criteria) {
-			case CRITERIA_EQUAL:
-				break;
+				case CRITERIA_EQUAL:
+					break;
 
-			case CRITERIA_WITHIN:
-				break;
+				case CRITERIA_WITHIN:
+					break;
 
-			case CRITERIA_GREATER:
-				break;
+				case CRITERIA_GREATER:
+					break;
 
-			case CRITERIA_EQGREATER:
-				break;
+				case CRITERIA_EQGREATER:
+					break;
 
-			case CRITERIA_LESS:
-				break;
+				case CRITERIA_LESS:
+					break;
 
-			case CRITERIA_EQLESS:
-				break;
+				case CRITERIA_EQLESS:
+					break;
 			}
 			break;
 		case COMPARE_BEFORE_ACTIVITY:

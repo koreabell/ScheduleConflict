@@ -86,6 +86,13 @@ typedef enum {
 	TIMEUNIT_RESERVED
 } TIME_UNIT;
 
+typedef enum {
+	ACTIVITY_FIRST_OF_RANGE,
+	ACTIVITY_LAST_OF_PEVIOUS_RANGE,
+	ACTIVITY_LAST_OF_RANGE,
+	ACTIVITY_PREVIOUS,
+	ACTIVITY_NEXT
+};
 
 typedef struct {
 	unsigned int uiRuleID;
